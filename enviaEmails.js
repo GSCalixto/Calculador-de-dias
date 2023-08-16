@@ -29,7 +29,7 @@ function enviaEmail() {
     var numerosEncontrados = celValC.match(/\d+/g);
     var numerosConcatenados = parseInt(numerosEncontrados ? numerosEncontrados.join('') : '');
 
-    if (numerosConcatenados >= 15) {
+    if (numerosConcatenados >= 7) {
       var numProcessos = [];
       numProcessos.push(celValA);
 
