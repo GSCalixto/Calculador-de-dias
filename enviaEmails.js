@@ -1,6 +1,7 @@
 //Função para envia e-mail aviasando que o prazo de 15 dias foi atingido
 function enviaEmail() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const anexo = DriveApp.getFileById("1lL9gxTV0V3xHu7yJ5F4CmpQAn8XDVu4yXXWCm7mGvQk");
 
   const ultimaLinha = sheet.getLastRow();
 
@@ -52,7 +53,8 @@ function enviaEmail() {
                           </tr>
                         </tbody>
                     </table>`,
-          name: "Processos recebidos na corregedoria a mais de 15 dias"
+          name: "Processos recebidos na corregedoria a mais de 15 dias",
+          attachments: [anexo]
         };       
         MailApp.sendEmail(email);
       };
