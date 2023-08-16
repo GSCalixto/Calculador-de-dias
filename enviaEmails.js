@@ -1,8 +1,8 @@
-//Função para envia e-mail aviasando que o prazo de 15 dias foi atingido
-function enviaEmail() {
+//Função para envia e-mail aviasando que o prazo de 7 dias foi atingido
+function main() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   const anexo = DriveApp.getFileById("1lL9gxTV0V3xHu7yJ5F4CmpQAn8XDVu4yXXWCm7mGvQk");
-
+  
   const ultimaLinha = sheet.getLastRow();
 
   const colunaA = sheet.getRange(2, 1, ultimaLinha, 1); // Coluna A
@@ -26,43 +26,54 @@ function enviaEmail() {
     var celValC = valoresColunaC[i][0];
 
     //Extrai o número dentro da variável celValC
-    var numerosEncontrados = celValC.match(/\d+/g);
-    var numerosConcatenados = parseInt(numerosEncontrados ? numerosEncontrados.join('') : '');
+    var numeroDias = extraiNumero(celValC);
 
-    if (numerosConcatenados >= 7) {
+    if (numeroDias >= 7) {
       var numProcessos = [];
       numProcessos.push(celValA);
 
-      var dataRecebimento = [];
-      dataRecebimento.push(formataData(celValB));
+      var data = [];
+      data.push(formataData(celValB));
 
-      for ( j in numProcessos){
-        var email = {
-          to: "gcalixto.ctce@gmail.com",
-          //to: "wgsilva@fazenda.rj.gov.br",
-          subject: "Alerta de processos",
-          htmlBody: `<table border="1px" cellpadding="5px" style="border-collapse:collapse;border-color:#666">
-                        <tbody>
-                          <tr>
-                            <th>Numero do Processo</th>
-                            <th>Data de recebimento</th>
-                          </tr>
-                          <tr>
-                            <td> `+numProcessos[j]+`</td>
-                            <td> `+dataRecebimento[j]+`</td>
-                          </tr>
-                        </tbody>
-                    </table>`,
-          name: "Processos recebidos na corregedoria a mais de 15 dias",
-          attachments: [anexo]
-        };       
-        MailApp.sendEmail(email);
-      };
+      enviaEmail(numProcessos, data, anexo);
     };
   };
 };
+ 
+function enviaEmail(numProcessos, data, anexo) {
+  for ( j in numProcessos){
+    var email = {
+      to: "gcalixto.ctce@gmail.com",
+      //to: "wgsilva@fazenda.rj.gov.br",
+      subject: "Alerta de processos",
+      htmlBody: `<table border="1px" cellpadding="5px" style="border-collapse:collapse;border-color:#666">
+                    <tbody>
+                      <tr>
+                        <th>Numero do Processo</th>
+                        <th>Data de recebimento</th>
+                      </tr>
+                      <tr>
+                        <td> `+numProcessos[j]+`</td>
+                        <td> `+data[j]+`</td>
+                      </tr>
+                      </tbody>
+                </table>`,
+      name: "Processos recebidos na corregedoria a mais de 15 dias",
+      attachments: [anexo]
+    };       
+    MailApp.sendEmail(email);
+  };
+};
 
-  //Formata a informação de data para o padrão DD/MM/AAAA usando ReGex
+//Extrai o número dentro da variável celValC
+function extraiNumero(celVal) {
+    var numerosEncontrados = celVal.match(/\d+/g);
+    var numeroDias = parseInt(numerosEncontrados ? numerosEncontrados.join('') : '');
+
+    return numeroDias;
+};
+
+//Formata a informação de data para o padrão DD/MM/AAAA usando ReGex
 function formataData(data) {
   const regexNumData = [...data.matchAll(/[0-9]{1,4}/g)];
   const regexStringData = /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/;
@@ -75,3 +86,4 @@ function formataData(data) {
 
   return stringFormatada;
 };
+
