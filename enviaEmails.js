@@ -25,7 +25,7 @@ function main() {
     // Valor da célula na coluna C
     var celValC = valoresColunaC[i][0];
 
-    //Extrai o número dentro da variável celValC
+    //Chamada a função que extrai numeros da celula com a contagem de dias
     var numeroDias = extraiNumero(celValC);
 
     if (numeroDias >= 7) {
@@ -65,7 +65,7 @@ function enviaEmail(numProcessos, data, anexo) {
   };
 };
 
-//Extrai o número dentro da variável celValC
+//Extrai o número dentro da variável vinda da celula com a contagens de dias
 function extraiNumero(celVal) {
     var numerosEncontrados = celVal.match(/\d+/g);
     var numeroDias = parseInt(numerosEncontrados ? numerosEncontrados.join('') : '');
